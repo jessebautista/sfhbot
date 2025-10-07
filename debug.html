@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white;
+            color: black;
+            padding: 20px;
+        }
+        .debug-info {
+            background-color: #f0f0f0;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>SFH Bot Debug Page</h1>
+    <div class="debug-info">
+        <h2>If you can see this page, HTML is loading correctly</h2>
+        <p>Current time: <span id="time"></span></p>
+        <p>Location: <span id="location"></span></p>
+    </div>
+    
+    <script>
+        document.getElementById('time').textContent = new Date().toISOString();
+        document.getElementById('location').textContent = window.location.href;
+        console.log('Debug page loaded successfully');
+    </script>
+</body>
+</html>
