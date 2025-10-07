@@ -1,8 +1,8 @@
 import { Router } from 'express'
 import { z } from 'zod'
-import { ChatService } from '../services/ChatService'
-import { SupabaseService } from '../services/SupabaseService'
-import { SmartQueryService } from '../services/SmartQueryService'
+import { ChatService } from '../services/ChatService.js'
+import { SupabaseService } from '../services/SupabaseService.js'
+import { SmartQueryService } from '../services/SmartQueryService.js'
 
 const router = Router()
 

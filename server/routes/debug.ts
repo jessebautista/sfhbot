@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { ExternalDataService } from '../services/ExternalDataService'
+import { ExternalDataService } from '../services/ExternalDataService.js'
 
 const router = Router()
 // Don't create the service here - create it inside the route to avoid timing issues

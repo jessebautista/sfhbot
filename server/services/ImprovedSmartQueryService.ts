@@ -1,8 +1,8 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js'
 import OpenAI from 'openai'
-import { DynamicQueryBuilder, QueryResult } from '../utils/DynamicQueryBuilder'
-import { SchemaIntrospector } from '../utils/SchemaIntrospector'
-import { QueryValidationService, QueryError, ValidationResult } from '../utils/QueryValidationService'
+import { DynamicQueryBuilder, QueryResult } from '../utils/DynamicQueryBuilder.js'
+import { SchemaIntrospector } from '../utils/SchemaIntrospector.js'
+import { QueryValidationService, QueryError, ValidationResult } from '../utils/QueryValidationService.js'
 
 interface SmartSearchResult {
   results: any[]

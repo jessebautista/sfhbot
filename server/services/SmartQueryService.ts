@@ -1,6 +1,6 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js'
 import OpenAI from 'openai'
-import { PromptService } from './PromptService'
+import { PromptService } from './PromptService.js'
 
 interface SmartSearchResult {
   results: any[]

@@ -1,5 +1,5 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js'
-import { IntelligentQueryReasoner } from './IntelligentQueryReasoner'
+import { IntelligentQueryReasoner } from './IntelligentQueryReasoner.js'
 
 interface SearchResult {
   results: any[]

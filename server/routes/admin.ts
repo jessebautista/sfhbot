@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express'
-import { getPromptConfig } from '../config/promptConfig'
+import { getPromptConfig } from '../config/promptConfig.js'
 
 const router = Router()
 

@@ -1,5 +1,5 @@
-import { VectorKnowledgeService } from './VectorKnowledgeService'
-import { ExternalDataService, SearchResult } from './ExternalDataService'
+import { VectorKnowledgeService } from './VectorKnowledgeService.js'
+import { ExternalDataService, SearchResult } from './ExternalDataService.js'
 
 interface KnowledgeResponse {
   source: 'vector' | 'news' | 'piano' | 'mixed'

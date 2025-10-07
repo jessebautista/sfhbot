@@ -1,8 +1,8 @@
 import OpenAI from 'openai'
-import { HybridKnowledgeService } from './HybridKnowledgeService'
-import { Mem0PersonalMemory } from './Mem0PersonalMemory'
-import { IntelligentExternalDataService } from './IntelligentExternalDataService'
-import { getPromptStrategy } from './PromptTemplates'
+import { HybridKnowledgeService } from './HybridKnowledgeService.js'
+import { Mem0PersonalMemory } from './Mem0PersonalMemory.js'
+import { IntelligentExternalDataService } from './IntelligentExternalDataService.js'
+import { getPromptStrategy } from './PromptTemplates.js'
 
 export class IntelligentChatService {
   private openai: OpenAI

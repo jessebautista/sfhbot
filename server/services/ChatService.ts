@@ -1,9 +1,9 @@
 import OpenAI from 'openai'
-import { HybridKnowledgeService } from './HybridKnowledgeService'
-import { Mem0PersonalMemory } from './Mem0PersonalMemory'
-import { SmartQueryService } from './SmartQueryService'
-import { getPromptStrategy } from './PromptTemplates'
-import { conversationSession } from './ConversationSession'
+import { HybridKnowledgeService } from './HybridKnowledgeService.js'
+import { Mem0PersonalMemory } from './Mem0PersonalMemory.js'
+import { SmartQueryService } from './SmartQueryService.js'
+import { getPromptStrategy } from './PromptTemplates.js'
+import { conversationSession } from './ConversationSession.js'
 
 export class ChatService {
   private openai: OpenAI

@@ -1,5 +1,5 @@
 import { SupabaseClient } from '@supabase/supabase-js'
-import { SchemaIntrospector, TableSchema } from './SchemaIntrospector'
+import { SchemaIntrospector, TableSchema } from './SchemaIntrospector.js'
 
 /**
  * Query execution result with metadata
