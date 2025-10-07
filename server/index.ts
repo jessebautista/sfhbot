@@ -3,10 +3,10 @@ dotenv.config()
 
 import express from 'express'
 import cors from 'cors'
-import { chatRouter } from './routes/chat'
-import { debugRouter } from './routes/debug'
-import adminRouter from './routes/admin'
-import systemPromptsRouter from './routes/system-prompts'
+import { chatRouter } from './routes/chat.js'
+import { debugRouter } from './routes/debug.js'
+import adminRouter from './routes/admin.js'
+import systemPromptsRouter from './routes/system-prompts.js'
 
 const app = express()
 const PORT = process.env.PORT || 3001

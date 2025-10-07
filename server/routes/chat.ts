@@ -46,15 +46,29 @@ router.post('/chat', async (req, res) => {
   let userId: string = ''
   let message: string = ''
   let reply: string = ''
-  let errorOccurred = false
+  let _errorOccurred = false
   let errorMessage = ''
 
   try {
+    console.log('Chat request received:', { body: req.body })
+    
+    // Check if OpenAI API key is available
+    if (!process.env.OPENAI_API_KEY) {
+      console.error('OpenAI API key not configured')
+      return res.json({ 
+        reply: 'Hello! I\'m currently being configured. Please check back in a few minutes while the administrator sets up the necessary API keys.' 
+      })
+    }
+    
     const parsed = chatRequestSchema.parse(req.body)
     userId = parsed.userId
     message = parsed.message
+    
+    console.log('Processing chat message:', { userId, message })
 
     reply = await (await getChatService()).processMessage(userId, message)
+    
+    console.log('Chat response generated:', { reply })
 
     const responseTime = Date.now() - startTime
 
@@ -82,7 +96,7 @@ router.post('/chat', async (req, res) => {
       response_time_ms: responseTime
     })
   } catch (error) {
-    errorOccurred = true
+    _errorOccurred = true
     errorMessage = error instanceof Error ? error.message : 'Unknown error'
     
     console.error('Chat endpoint error:', error)
