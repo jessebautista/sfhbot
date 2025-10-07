@@ -45,7 +45,6 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ userId }) => {
         })
       })
 
-      const contentType = response.headers.get('content-type') || ''
       const raw = await response.text()
 
       if (!response.ok) {

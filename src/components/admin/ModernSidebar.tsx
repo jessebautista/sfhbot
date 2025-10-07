@@ -7,10 +7,7 @@ import {
   HiTrendingUp,
   HiSparkles,
   HiLogout,
-  HiSupport,
-  HiHome,
-  HiCollection,
-  HiAdjustments
+  HiSupport
 } from 'react-icons/hi'
 
 interface NavigationItem {

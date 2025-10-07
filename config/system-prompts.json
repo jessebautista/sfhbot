@@ -1,0 +1,94 @@
+{
+  "intelligent_query_analysis": {
+    "name": "Intelligent Query Analysis",
+    "description": "Main prompt for analyzing user queries and determining search strategy",
+    "template": "Analyze this user query for a music/piano database search:\n\"{userQuery}\"\n\nDatabase contains:\n- pianos: piano_title, artist_name, piano_statement\n- news: news_title, newscontent, news_excerpt, news_categories  \n- piano_activations: act_title, act_location, act_content, act_artists\n\nRespond with JSON only:\n{\n  \"type\": \"piano_search|news_search|activation_search|location_search|artist_search|general\",\n  \"reasoning\": \"brief explanation\",\n  \"searchTerms\": [\"key\", \"search\", \"terms\"],\n  \"tables\": [\"primary\", \"secondary\"]\n}",
+    "variables": ["userQuery"],
+    "model_settings": {
+      "model": "gpt-4",
+      "temperature": 0.1,
+      "max_tokens": 300
+    }
+  },
+  "search_term_extraction": {
+    "name": "Search Term Extraction",
+    "description": "Instructions for extracting clean search terms from user queries",
+    "config": {
+      "piano_keywords": ["piano", "instrument", "music", "keyboard"],
+      "news_keywords": ["black radio", "experience", "glasper", "robert glasper", "radio", "news", "article"],
+      "activation_keywords": ["event", "activation", "performance", "show", "concert"],
+      "artist_keywords": ["artist", "musician", "composer", "performer"],
+      "location_keywords": ["location", "place", "venue", "address", "city"],
+      "time_keywords": ["newest", "latest", "recent", "new", "old", "vintage"]
+    }
+  },
+  "database_schema_info": {
+    "name": "Database Schema Information",
+    "description": "Current database structure and column mappings",
+    "tables": {
+      "pianos": {
+        "searchable_columns": ["piano_title", "artist_name", "piano_statement"],
+        "display_columns": ["piano_title", "artist_name", "piano_statement", "created_at"],
+        "sort_preference": "created_at"
+      },
+      "news": {
+        "searchable_columns": ["news_title", "newscontent", "news_excerpt", "news_categories"],
+        "display_columns": ["news_title", "news_excerpt", "newscontent", "created_at"],
+        "sort_preference": "created_at"
+      },
+      "piano_activations": {
+        "searchable_columns": ["act_title", "act_content", "act_artists", "act_location"],
+        "display_columns": ["act_title", "act_content", "act_artists", "act_location", "created_at"],
+        "sort_preference": "created_at"
+      }
+    }
+  },
+  "query_strategies": {
+    "name": "Query Strategies",
+    "description": "Different strategies for finding relevant data",
+    "strategies": {
+      "exact_match": {
+        "description": "Look for exact matches in key fields",
+        "priority": 1,
+        "fallback": "fuzzy_search"
+      },
+      "fuzzy_search": {
+        "description": "Use partial matching with ILIKE queries",
+        "priority": 2,
+        "fallback": "broad_search"
+      },
+      "broad_search": {
+        "description": "Get recent records when specific searches fail",
+        "priority": 3,
+        "fallback": "organizational_knowledge"
+      },
+      "organizational_knowledge": {
+        "description": "Fall back to vector knowledge base",
+        "priority": 4,
+        "fallback": null
+      }
+    }
+  },
+  "response_formatting": {
+    "name": "Response Formatting",
+    "description": "How to format AI responses with found data",
+    "templates": {
+      "piano_found": "Based on our piano collection, here's what I found: {data}",
+      "news_found": "From our news archives: {data}",
+      "activation_found": "Here are the relevant events and activations: {data}",
+      "multiple_types": "I found information across several categories: {data}",
+      "no_data": "I couldn't find specific information about that in our database, but here's what I can tell you about our organization: {fallback_data}"
+    }
+  },
+  "debugging": {
+    "name": "Debugging Settings",
+    "description": "Control logging and debugging output",
+    "settings": {
+      "log_extracted_terms": true,
+      "log_query_analysis": true,
+      "log_database_results": true,
+      "log_ai_reasoning": true,
+      "verbose_errors": true
+    }
+  }
+}

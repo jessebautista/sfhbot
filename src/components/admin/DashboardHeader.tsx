@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import {
   HiSearch,
   HiBell,
-  HiCog,
   HiChevronRight,
   HiHome,
   HiUser,
@@ -27,8 +26,7 @@ interface DashboardHeaderProps {
 export default function DashboardHeader({ 
   title, 
   subtitle, 
-  breadcrumbs = [], 
-  actions 
+  breadcrumbs = [] 
 }: DashboardHeaderProps) {
   const [isDarkMode, setIsDarkMode] = useState(false)
   const [showUserMenu, setShowUserMenu] = useState(false)

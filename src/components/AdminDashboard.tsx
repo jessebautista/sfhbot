@@ -2,30 +2,13 @@ import React, { useState, useEffect } from 'react'
 import {
   HiCog,
   HiBeaker,
-  HiChartBar,
-  HiPlay,
-  HiStop,
-  HiExclamation,
-  HiCheckCircle,
-  HiInformationCircle,
-  HiAdjustments,
-  HiClipboardCheck,
   HiTrendingUp,
-  HiLightBulb,
-  HiSparkles,
   HiCubeTransparent,
   HiLightningBolt,
-  HiChip,
-  HiCloud,
   HiDatabase,
-  HiEye,
   HiClock,
   HiStar,
-  HiUsers,
-  HiGlobeAlt,
-  HiShieldCheck,
-  HiCode,
-  HiTemplate
+  HiUsers
 } from 'react-icons/hi'
 import SystemPromptsEditor from './SystemPromptsEditor'
 import ModernSidebar from './admin/ModernSidebar'
@@ -53,7 +36,7 @@ const AdminDashboard: React.FC = () => {
   const [testData, setTestData] = useState('')
   const [testResult, setTestResult] = useState<any>(null)
   const [metrics, setMetrics] = useState<any>(null)
-  const [abTests, setAbTests] = useState<any>(null)
+  const [, setAbTests] = useState<any>(null)
   const [loading, setLoading] = useState(false)
   const [activeTab, setActiveTab] = useState<'dashboard' | 'prompts' | 'settings' | 'testing' | 'analytics'>('dashboard')
 
@@ -206,7 +189,8 @@ const AdminDashboard: React.FC = () => {
     }
   }
 
-  const startAbTest = async (testId: string) => {
+  // @ts-ignore - Future use function
+  const _startAbTest = async (_testId: string) => {
     setLoading(true)
     try {
       // Simulate API call delay
@@ -215,14 +199,14 @@ const AdminDashboard: React.FC = () => {
       // Update local state to show test as active
       setAbTests((prev: any) => ({
         ...prev,
-        currentActiveTest: testId,
+        currentActiveTest: _testId,
         tests: prev.tests.map((test: any) => ({
           ...test,
-          status: test.id === testId ? 'active' : 'inactive'
+          status: test.id === _testId ? 'active' : 'inactive'
         }))
       }))
       
-      alert(`A/B Test started: ${testId}`)
+      alert(`A/B Test started: ${_testId}`)
     } catch (error) {
       console.error('Failed to start A/B test:', error)
       alert('Failed to start A/B test')
@@ -231,7 +215,8 @@ const AdminDashboard: React.FC = () => {
     }
   }
 
-  const stopAbTest = async () => {
+  // @ts-ignore - Future use function
+  const _stopAbTest = async () => {
     setLoading(true)
     try {
       // Simulate API call delay
@@ -306,7 +291,7 @@ const AdminDashboard: React.FC = () => {
     <div className="min-h-screen bg-gray-50 flex">
       {/* Sidebar */}
       <div className="hidden lg:block">
-        <ModernSidebar activeTab={activeTab} onTabChange={setActiveTab} />
+        <ModernSidebar activeTab={activeTab} onTabChange={(tab: string) => setActiveTab(tab as typeof activeTab)} />
       </div>
       
       {/* Main Content */}
