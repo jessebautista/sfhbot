@@ -19,7 +19,7 @@ app.use('/debug', debugRouter)
 app.use('/admin', adminRouter)
 app.use('/api/system-prompts', systemPromptsRouter)
 
-app.get('/health', (req, res) => {
+app.get('/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() })
 })
 
