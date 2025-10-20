@@ -2,6 +2,7 @@ import OpenAI from 'openai'
 import { HybridKnowledgeService } from './HybridKnowledgeService.js'
 import { Mem0PersonalMemory } from './Mem0PersonalMemory.js'
 import { SmartQueryService } from './SmartQueryService.js'
+import { FAQKnowledgeService } from './FAQKnowledgeService.js'
 import { getPromptStrategy } from './PromptTemplates.js'
 import { conversationSession } from './ConversationSession.js'
 
@@ -10,6 +11,7 @@ export class ChatService {
   private personalMemory: Mem0PersonalMemory
   private knowledgeService: HybridKnowledgeService
   private smartQuery: SmartQueryService
+  private faqService: FAQKnowledgeService
 
   constructor() {
     this.openai = new OpenAI({
@@ -18,6 +20,7 @@ export class ChatService {
     this.personalMemory = new Mem0PersonalMemory()
     this.knowledgeService = new HybridKnowledgeService()
     this.smartQuery = new SmartQueryService()
+    this.faqService = new FAQKnowledgeService()
   }
 
   async processMessage(userId: string, message: string): Promise<string> {
@@ -35,20 +38,40 @@ export class ChatService {
       // For logged-out users, skip personal memory - just use session conversation
       const personalContext: string[] = []
       
-      // Use smart query system for external database (primary data source)
+      // Step 1: Check FAQ for foundational/static information
+      const faqResults = this.faqService.searchFAQ(message)
+      console.log(`📚 FAQ search: Found ${faqResults.length} relevant items`)
+      
+      // Step 2: Use smart query system for external database (current/dynamic data)
       const smartResult = await this.smartQuery.smartSearch(message)
       console.log(`🎯 Smart query result: ${smartResult.dataUsed ? 'SUCCESS' : 'NO DATA'} - ${smartResult.reasoning}`)
       
-      // Fallback to organizational knowledge if no external data found
+      // Step 3: Combine FAQ and external data or fallback to organizational knowledge
       let organizationalKnowledge: string[] = []
-      let knowledgeSource = 'smart_query'
+      let knowledgeSource = 'hybrid'
       
-      if (smartResult.dataUsed) {
-        // Use smart search results
+      // Priority: FAQ + External Data > FAQ only > External Data only > Organizational Knowledge
+      if (faqResults.length > 0 && smartResult.dataUsed) {
+        // Best case: Both FAQ and current data available
+        organizationalKnowledge = [
+          this.faqService.formatFAQForResponse(faqResults),
+          smartResult.naturalResponse
+        ]
+        knowledgeSource = 'faq_and_external'
+        console.log('✅ Using both FAQ and external data')
+      } else if (faqResults.length > 0) {
+        // FAQ found but no current data
+        organizationalKnowledge = [this.faqService.formatFAQForResponse(faqResults)]
+        knowledgeSource = 'faq_only'
+        console.log('📖 Using FAQ knowledge only')
+      } else if (smartResult.dataUsed) {
+        // External data found but no FAQ
         organizationalKnowledge = [smartResult.naturalResponse]
+        knowledgeSource = 'external_only'
+        console.log('🔍 Using external data only')
       } else {
         // Fallback to organizational knowledge base
-        console.log('🔄 No external data found, using organizational knowledge')
+        console.log('🔄 No FAQ or external data found, using organizational knowledge')
         const knowledgeResponse = await this.knowledgeService.searchAllSources(message)
         organizationalKnowledge = knowledgeResponse.results
         knowledgeSource = knowledgeResponse.source
@@ -62,6 +85,7 @@ export class ChatService {
         source: knowledgeSource,
         query_type: queryType,
         results_count: organizationalKnowledge.length,
+        faq_results: faqResults.length,
         smart_reasoning: smartResult.reasoning,
         data_used: smartResult.dataUsed,
         conversation_history_length: conversationHistory.length
