@@ -1,5 +1,10 @@
 import fs from 'fs'
 import path from 'path'
+import { fileURLToPath } from 'url'
+
+// ES module equivalent of __dirname
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 export interface FAQItem {
   question: string
@@ -62,10 +67,22 @@ export class FAQKnowledgeService {
     // Default FAQ structure that can be easily updated
     this.faqData = [
       {
-        question: "What is SFH Bot?",
-        answer: "SFH Bot is an AI-powered receptionist service designed specifically for non-profit organizations. I provide 24/7 automated customer support for donations, events, volunteering inquiries, and general organizational information.",
+        question: "Who founded Sing for Hope?",
+        answer: "Sing for Hope was founded in 2006 by Monica Yunus and Camille Zamora, two acclaimed opera singers who envisioned using the arts to build community and heal hearts.",
         category: "About",
-        keywords: ["about", "what is", "sfh bot", "ai receptionist", "non-profit"]
+        keywords: ["founder", "founded", "monica yunus", "camille zamora", "opera singers", "2006"]
+      },
+      {
+        question: "What is Sing for Hope's mission?",
+        answer: "Sing for Hope harnesses the power of the arts to create a better world. We bring hope, healing, and inspiration to millions by creating interactive public art projects and providing arts programming in underserved communities.",
+        category: "About", 
+        keywords: ["mission", "arts", "hope", "healing", "inspiration", "public art", "communities"]
+      },
+      {
+        question: "Who is the current director of Sing for Hope?",
+        answer: "Sing for Hope is co-led by its founders Monica Yunus and Camille Zamora, who serve as Co-Founders and Executive Directors. They continue to guide the organization's artistic vision and community impact initiatives.",
+        category: "Leadership",
+        keywords: ["director", "leadership", "executive", "monica yunus", "camille zamora", "co-founders"]
       },
       {
         question: "How can I help with donations?",
@@ -78,16 +95,10 @@ export class FAQKnowledgeService {
         answer: "I can help you learn about current volunteer opportunities, application processes, and connect you with our volunteer coordination team. Please let me know what type of volunteering interests you most.",
         category: "Volunteering",
         keywords: ["volunteer", "help", "give time", "opportunities", "community service"]
-      },
-      {
-        question: "How can I get involved with events?",
-        answer: "I can provide information about upcoming events, registration processes, and how to stay updated on our event calendar. Would you like to know about specific types of events?",
-        category: "Events",
-        keywords: ["events", "calendar", "activities", "programs", "register"]
       }
     ]
     
-    console.log('📋 Default FAQ initialized with foundational knowledge')
+    console.log('📋 Default FAQ initialized with Sing for Hope foundational knowledge')
     this.isLoaded = true
   }
 
@@ -165,11 +176,14 @@ export class FAQKnowledgeService {
 
   public searchFAQ(query: string): FAQItem[] {
     if (!this.isLoaded) {
+      console.log('🚫 FAQ not loaded, returning empty results')
       return []
     }
 
     const queryWords = query.toLowerCase().split(/\s+/)
     const matches: Array<{item: FAQItem, score: number}> = []
+    
+    console.log(`🔍 Searching FAQ for: "${query}" (words: ${queryWords.join(', ')})`)
 
     for (const faq of this.faqData) {
       let score = 0
@@ -193,15 +207,19 @@ export class FAQKnowledgeService {
       if (answerMatch) score += 1
       
       if (score > 0) {
+        console.log(`✅ FAQ match found: "${faq.question}" (score: ${score})`)
         matches.push({ item: faq, score })
       }
     }
 
     // Sort by score and return top matches
-    return matches
+    const results = matches
       .sort((a, b) => b.score - a.score)
       .slice(0, 3)
       .map(match => match.item)
+      
+    console.log(`📚 Final FAQ results: ${results.length} items`)
+    return results
   }
 
   public getAllFAQs(): FAQItem[] {
@@ -226,7 +244,9 @@ export class FAQKnowledgeService {
 
     if (faqs.length === 1) {
       const faq = faqs[0]
-      return `**${faq.question}**\n\n${faq.answer}`
+      const formatted = `**${faq.question}**\n\n${faq.answer}`
+      console.log('📝 Formatted single FAQ response:', formatted)
+      return formatted
     }
 
     let formatted = "Here's what I found in our FAQ:\n\n"
@@ -234,7 +254,9 @@ export class FAQKnowledgeService {
       formatted += `**${faq.question}**\n${faq.answer}\n\n`
     }
     
-    return formatted.trim()
+    const finalFormatted = formatted.trim()
+    console.log('📝 Formatted multiple FAQ response:', finalFormatted)
+    return finalFormatted
   }
 
   public reloadFAQ(): void {

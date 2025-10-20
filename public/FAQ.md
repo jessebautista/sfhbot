@@ -1,12 +1,15 @@
-# SFH Bot - Frequently Asked Questions
+# Sing for Hope - Frequently Asked Questions
 
 ## About Our Organization
 
-### Who founded SFH?
-SFH (Serving Hearts Foundation) was founded in 2018 by Maria Rodriguez and Dr. James Chen, two community leaders passionate about addressing food insecurity and educational gaps in underserved communities.
+### Who founded Sing for Hope?
+Sing for Hope was founded in 2006 by Monica Yunus and Camille Zamora, two acclaimed opera singers who envisioned using the arts to build community and heal hearts.
+
+### Who is the current director of Sing for Hope?
+Sing for Hope is co-led by its founders Monica Yunus and Camille Zamora, who serve as Co-Founders and Executive Directors. They continue to guide the organization's artistic vision and community impact initiatives.
 
 ### What is our mission?
-Our mission is to empower communities through sustainable programs that address food security, educational opportunities, and economic development. We believe in creating lasting change from within communities.
+Our mission is to harness the power of the arts to create a better world. We bring hope, healing, and inspiration to millions by creating interactive public art projects and providing arts programming in underserved communities.
 
 ### Where are we located?
 Our main headquarters is located in Downtown Community Center at 123 Hope Street, and we operate satellite offices in five other neighborhoods across the metropolitan area.
