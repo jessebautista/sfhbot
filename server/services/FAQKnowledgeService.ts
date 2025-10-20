@@ -86,9 +86,9 @@ export class FAQKnowledgeService {
       },
       {
         question: "Who is the IT Director?",
-        answer: "The IT Director at Sing for Hope is Alex Chen, who oversees all technology infrastructure, digital platforms, and information systems. Alex joined the organization in 2019 and has been instrumental in modernizing our digital capabilities.",
+        answer: "Javier Hinojosa – Director of Information Technology: manages the organization's IT systems",
         category: "Leadership",
-        keywords: ["it director", "technology", "alex chen", "digital", "infrastructure", "systems"]
+        keywords: ["it director", "technology", "javier hinojosa", "information technology", "systems"]
       },
       {
         question: "How can I help with donations?",

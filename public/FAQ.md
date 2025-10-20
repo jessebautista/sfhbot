@@ -9,7 +9,7 @@ Sing for Hope was founded in 2006 by Monica Yunus and Camille Zamora, two acclai
 Sing for Hope is co-led by its founders Monica Yunus and Camille Zamora, who serve as Co-Founders and Executive Directors. They continue to guide the organization's artistic vision and community impact initiatives.
 
 ### Who is the IT Director?
-The IT Director at Sing for Hope is Alex Chen, who oversees all technology infrastructure, digital platforms, and information systems. Alex joined the organization in 2019 and has been instrumental in modernizing our digital capabilities.
+Javier Hinojosa – Director of Information Technology: manages the organization's IT systems
 
 ### What is our mission?
 Our mission is to harness the power of the arts to create a better world. We bring hope, healing, and inspiration to millions by creating interactive public art projects and providing arts programming in underserved communities.
