@@ -38,7 +38,15 @@ export class ChatService {
       // For logged-out users, skip personal memory - just use session conversation
       const personalContext: string[] = []
       
-      // Step 1: Check FAQ for foundational/static information
+      // Step 1: Check for vague queries that need clarification
+      const clarifyingResponse = this.checkForVagueQuery(message)
+      if (clarifyingResponse) {
+        console.log(`❓ Detected vague query, providing clarifying questions`)
+        conversationSession.addMessage(userId, 'assistant', clarifyingResponse)
+        return clarifyingResponse
+      }
+
+      // Step 2: Check FAQ for foundational/static information
       const faqResults = this.faqService.searchFAQ(message)
       console.log(`📚 FAQ search: Found ${faqResults.length} relevant items`)
       
@@ -250,5 +258,37 @@ export class ChatService {
     } catch (error) {
       console.error(`Error clearing data for user ${userId}:`, error)
     }
+  }
+
+  private checkForVagueQuery(message: string): string | null {
+    const lowerMessage = message.toLowerCase().trim()
+    
+    // Common vague patterns that need clarification
+    const vaguePatterns = [
+      {
+        patterns: [/^who('s| is)? the director\??$/i, /^director\??$/i],
+        response: "I'd be happy to help you find director information! Could you be more specific? For example:\n\n• **Executive Director** - Our organizational leadership\n• **IT Director** - Technology and systems\n• **Program Director** - Specific program leadership\n• **Development Director** - Fundraising and partnerships\n\nWhich type of director are you looking for?"
+      },
+      {
+        patterns: [/^who('s| is)? in charge\??$/i, /^who runs (this|the organization)\??$/i],
+        response: "I can help you learn about our leadership! Are you interested in:\n\n• **Executive Leadership** - Our founders and executive directors\n• **Department Leadership** - Specific department heads\n• **Program Leadership** - Leaders of specific programs\n• **Board Leadership** - Board of directors\n\nWhat level of leadership information would be most helpful?"
+      },
+      {
+        patterns: [/^contact$/i, /^how do i contact\??$/i, /^contact info$/i],
+        response: "I'd love to help you get in touch! What type of contact are you looking for?\n\n• **General Information** - Main office contact\n• **Donations** - Development team\n• **Volunteering** - Volunteer coordination\n• **Programs** - Specific program inquiries\n• **Media** - Press and media relations\n\nWhich would be most helpful for your needs?"
+      },
+      {
+        patterns: [/^help$/i, /^what can you do\??$/i, /^info$/i],
+        response: "I'm here to help with information about Sing for Hope! I can assist with:\n\n• **About Us** - Mission, founders, and organizational info\n• **Programs** - Details about our initiatives and services\n• **Get Involved** - Volunteering and donation opportunities\n• **Events** - Upcoming activities and how to participate\n• **Contact** - How to reach the right person for your needs\n\nWhat would you like to know more about?"
+      }
+    ]
+
+    for (const vague of vaguePatterns) {
+      if (vague.patterns.some(pattern => pattern.test(lowerMessage))) {
+        return vague.response
+      }
+    }
+
+    return null
   }
 }

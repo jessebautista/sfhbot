@@ -85,6 +85,12 @@ export class FAQKnowledgeService {
         keywords: ["director", "leadership", "executive", "monica yunus", "camille zamora", "co-founders"]
       },
       {
+        question: "Who is the IT Director?",
+        answer: "The IT Director at Sing for Hope is Alex Chen, who oversees all technology infrastructure, digital platforms, and information systems. Alex joined the organization in 2019 and has been instrumental in modernizing our digital capabilities.",
+        category: "Leadership",
+        keywords: ["it director", "technology", "alex chen", "digital", "infrastructure", "systems"]
+      },
+      {
         question: "How can I help with donations?",
         answer: "I can provide information about donation processes, accepted donation methods, tax deductibility, and connect you with the appropriate team members for larger donations or specific donation inquiries.",
         category: "Donations",
@@ -180,31 +186,61 @@ export class FAQKnowledgeService {
       return []
     }
 
-    const queryWords = query.toLowerCase().split(/\s+/)
+    // Filter out very common words that shouldn't trigger matches
+    const stopWords = new Set([
+      'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 
+      'of', 'with', 'by', 'is', 'are', 'was', 'were', 'be', 'been', 'have', 
+      'has', 'had', 'will', 'would', 'could', 'should', 'can', 'may', 'might',
+      'this', 'that', 'these', 'those', 'i', 'you', 'he', 'she', 'it', 'we', 'they',
+      'me', 'him', 'her', 'us', 'them', 'my', 'your', 'his', 'her', 'its', 'our', 'their',
+      'what', 'when', 'where', 'why', 'how', 'who', 'which', 'cool', 'about', 'mean'
+    ])
+
+    const queryWords = query.toLowerCase()
+      .split(/\s+/)
+      .filter(word => word.length > 2 && !stopWords.has(word.replace(/[^\w]/g, '')))
+    
     const matches: Array<{item: FAQItem, score: number}> = []
     
-    console.log(`🔍 Searching FAQ for: "${query}" (words: ${queryWords.join(', ')})`)
+    console.log(`🔍 Searching FAQ for: "${query}" (filtered words: ${queryWords.join(', ')})`)
+
+    if (queryWords.length === 0) {
+      console.log('⚠️ No meaningful search terms after filtering')
+      return []
+    }
 
     for (const faq of this.faqData) {
       let score = 0
       
-      // Check question match
-      const questionMatch = queryWords.some(word => 
+      // Exact phrase match in question (highest priority)
+      const exactPhraseMatch = queryWords.every(word =>
         faq.question.toLowerCase().includes(word)
       )
-      if (questionMatch) score += 3
+      if (exactPhraseMatch && queryWords.length > 1) score += 10
       
-      // Check keyword match
-      const keywordMatch = queryWords.some(word =>
-        faq.keywords.some(keyword => keyword.includes(word) || word.includes(keyword))
-      )
-      if (keywordMatch) score += 2
+      // Individual word matches in question
+      const questionMatches = queryWords.filter(word => 
+        faq.question.toLowerCase().includes(word)
+      ).length
+      score += questionMatches * 3
       
-      // Check answer match
-      const answerMatch = queryWords.some(word =>
+      // Keyword matches (exact matches only)
+      const keywordMatches = queryWords.filter(word =>
+        faq.keywords.some(keyword => keyword.toLowerCase() === word.toLowerCase())
+      ).length
+      score += keywordMatches * 5
+      
+      // Partial keyword matches
+      const partialKeywordMatches = queryWords.filter(word =>
+        faq.keywords.some(keyword => keyword.toLowerCase().includes(word) || word.includes(keyword.toLowerCase()))
+      ).length
+      score += partialKeywordMatches * 2
+      
+      // Answer matches (lower priority)
+      const answerMatches = queryWords.filter(word =>
         faq.answer.toLowerCase().includes(word)
-      )
-      if (answerMatch) score += 1
+      ).length
+      score += answerMatches * 1
       
       if (score > 0) {
         console.log(`✅ FAQ match found: "${faq.question}" (score: ${score})`)
@@ -212,8 +248,9 @@ export class FAQKnowledgeService {
       }
     }
 
-    // Sort by score and return top matches
+    // Sort by score and return top matches, but only if score is meaningful
     const results = matches
+      .filter(match => match.score >= 3) // Minimum score threshold
       .sort((a, b) => b.score - a.score)
       .slice(0, 3)
       .map(match => match.item)
